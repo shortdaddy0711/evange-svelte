@@ -1,13 +1,16 @@
 <script lang="ts">
   import { t } from '$lib/i18n';
+  import { slides } from '$lib/slides';
 
   export let slideId: number;
+
+  $: slide = slides.find(s => s.id === slideId)!;
 </script>
 
-{#if slideId === 1}
+{#if slide.type === 'intro'}
   <p class="styled-text">{$t('slide1_text')}</p>
 
-{:else if slideId === 2}
+{:else if slide.type === 'center-card'}
   <div class="card">
     <div class="card-content">
       <p class="normal-text">{$t('slide2_body1')}</p>
@@ -24,171 +27,40 @@
     </div>
   </div>
 
-{:else if slideId === 3}
+{:else if slide.type === 'content' && slide.blocks}
   <div class="card-inner">
-    <h3>{$t('slide3_title')}</h3>
-    <p>{$t('slide3_body')}</p>
+    {#each slide.blocks as block}
+      {#if block.type === 'title'}
+        <h3>{$t(block.key)}</h3>
+
+      {:else if block.type === 'body'}
+        <p class="normal-text">{$t(block.key)}</p>
+
+      {:else if block.type === 'quote'}
+        <p>
+          <span class="quote-text">{$t(block.key)}</span>
+          {#if block.cite}<span class="citation">{$t(block.cite)}</span>{/if}
+        </p>
+
+      {:else if block.type === 'prayer'}
+        <p class="quote-text">{$t(block.key)}</p>
+
+      {:else if block.type === 'question'}
+        <p class="question-text">{$t(block.key)}</p>
+
+      {:else if block.type === 'text-cite'}
+        <p>
+          <span class="five-thing-text">{$t(block.textKey)}</span>
+          {#if block.citeKey}<span class="citation">{$t(block.citeKey)}</span>{/if}
+        </p>
+
+      {:else if block.type === 'spacer'}
+        <br />
+      {/if}
+    {/each}
   </div>
 
-{:else if slideId === 4}
-  <div class="card-inner">
-    <h3>{$t('slide4_title')}</h3>
-    <p>{$t('slide4_body')}</p>
-  </div>
-
-{:else if slideId === 5}
-  <div class="card-inner">
-    <p>
-      <span class="normal-text">{$t('slide5_prefix')}</span>
-      <span class="quote-text">{$t('slide5_quote')}</span>
-    </p>
-    <p class="normal-text">{$t('slide5_body')}</p>
-  </div>
-
-{:else if slideId === 6}
-  <div class="card-inner">
-    <h3>{$t('slide6_title')}</h3>
-    <p class="normal-text">{$t('slide6_body')}</p>
-  </div>
-
-{:else if slideId === 7}
-  <div class="card-inner">
-    <h3>{$t('slide7_title')}</h3>
-    <p>
-      <span class="normal-text">{$t('slide7_prefix')}</span>
-      <span class="quote-text">{$t('slide7_quote')}</span>
-    </p>
-    <br />
-    <p class="normal-text">{$t('slide7_body')}</p>
-  </div>
-
-{:else if slideId === 8}
-  <div class="card-inner">
-    <h3>{$t('slide8_title')}</h3>
-    <p class="quote-text">{$t('slide8_quote')}</p>
-    <p class="normal-text">{$t('slide8_body')}</p>
-    <br />
-    <p class="question-text">{$t('slide8_question')}</p>
-  </div>
-
-{:else if slideId === 9}
-  <div class="card-inner">
-    <p>
-      <span class="normal-text">{$t('slide9_prefix')}</span>
-      <span class="quote-text">{$t('slide9_quote')}</span>
-      <span class="citation">{$t('slide9_cite')}</span>
-    </p>
-    <br />
-    <p class="normal-text">{$t('slide9_body1')}</p>
-    <p class="quote-text">{$t('slide9_prayer')}</p>
-    <p>
-      <span class="normal-text">{$t('slide9_body2')}</span>
-      <span class="quote-text">{$t('slide9_quote2')}</span>
-      <span class="citation">{$t('slide9_cite2')}</span>
-    </p>
-  </div>
-
-{:else if slideId === 10}
-  <div class="card-inner">
-    <p>
-      <span class="five-thing-text">{$t('slide10_text1')}</span>
-      <span class="citation">{$t('slide10_cite1')}</span>
-    </p>
-    <br />
-    <p>
-      <span class="five-thing-text">{$t('slide10_text2')}</span>
-      <span class="citation">{$t('slide10_cite2')}</span>
-    </p>
-    <br />
-    <p>
-      <span class="five-thing-text">{$t('slide10_text3')}</span>
-      <span class="citation">{$t('slide10_cite3')}</span>
-    </p>
-    <br />
-    <p>
-      <span class="five-thing-text">{$t('slide10_text4')}</span>
-    </p>
-  </div>
-
-{:else if slideId === 11}
-  <div class="card-inner">
-    <p>
-      <span class="five-thing-text">{$t('slide11_text1')}</span>
-      <span class="citation">{$t('slide11_cite1')}</span>
-    </p>
-    <br />
-    <p>
-      <span class="five-thing-text">{$t('slide11_text2')}</span>
-      <span class="citation">{$t('slide11_cite2')}</span>
-    </p>
-    <br />
-    <p>
-      <span class="five-thing-text">{$t('slide11_text3')}</span>
-      <span class="citation">{$t('slide11_cite3')}</span>
-    </p>
-    <br />
-    <p>
-      <span class="five-thing-text">{$t('slide11_text4')}</span>
-      <span class="citation">{$t('slide11_cite4')}</span>
-    </p>
-  </div>
-
-{:else if slideId === 12}
-  <div class="card-inner">
-    <p>
-      <span class="five-thing-text">{$t('slide12_text1')}</span>
-      <span class="citation">{$t('slide12_cite1')}</span>
-    </p>
-    <br />
-    <p>
-      <span class="five-thing-text">{$t('slide12_text2')}</span>
-      <span class="citation">{$t('slide12_cite2')}</span>
-    </p>
-    <br />
-    <p>
-      <span class="five-thing-text">{$t('slide12_text3')}</span>
-      <span class="citation">{$t('slide12_cite3')}</span>
-    </p>
-  </div>
-
-{:else if slideId === 13}
-  <div class="card-inner">
-    <p>
-      <span class="five-thing-text">{$t('slide13_text1')}</span>
-      <span class="citation">{$t('slide13_cite1')}</span>
-    </p>
-    <br />
-    <p>
-      <span class="five-thing-text">{$t('slide13_text2')}</span>
-      <span class="citation">{$t('slide13_cite2')}</span>
-    </p>
-  </div>
-
-{:else if slideId === 14}
-  <div class="card-inner">
-    <p>
-      <span class="five-thing-text">{$t('slide14_text1')}</span>
-      <span class="citation">{$t('slide14_cite1')}</span>
-    </p>
-    <br />
-    <p>
-      <span class="five-thing-text">{$t('slide14_text2')}</span>
-    </p>
-  </div>
-
-{:else if slideId === 15}
-  <div class="card-inner">
-    <p>
-      <span class="five-thing-text">{$t('slide15_text1')}</span>
-      <span class="citation">{$t('slide15_cite1')}</span>
-    </p>
-    <br />
-    <p>
-      <span class="five-thing-text">{$t('slide15_text2')}</span>
-    </p>
-  </div>
-
-{:else if slideId === 16}
+{:else if slide.type === 'contact'}
   <div class="card">
     <div class="card-content">
       <p class="normal-text">{$t('slide16_body')}</p>
